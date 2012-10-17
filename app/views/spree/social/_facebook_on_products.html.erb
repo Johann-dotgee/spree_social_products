@@ -8,15 +8,28 @@
 <% end %>
 
 <div class="facebook-like">
-	<script>
-		(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=<%= Spree::Config.facebook_app_id %>";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
-	</script>
-
+	<% if Spree::Config.likes_only_on_fb %>
+  	<script>
+      if(window !== window.top){
+    		(function(d, s, id) {
+    			var js, fjs = d.getElementsByTagName(s)[0];
+    			if (d.getElementById(id)) return;
+    			js = d.createElement(s); js.id = id;
+    			js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=<%= Spree::Config.facebook_app_id %>";
+    			fjs.parentNode.insertBefore(js, fjs);
+    		}(document, 'script', 'facebook-jssdk'));
+      }
+  	</script>
+  <% else %>
+    <script>
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=<%= Spree::Config.facebook_app_id %>";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+  <% end %>
 	<div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="segoe ui" data-href="<%= product_url(product) %>"></div>
 </div>

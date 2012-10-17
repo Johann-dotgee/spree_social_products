@@ -7,6 +7,7 @@ Spree::AppConfiguration.class_eval do
   preference :facebook_button, :boolean, :default => true
   preference :delicious_button, :boolean, :default => false
   preference :reddit_button, :boolean, :default => false
+  preference :likes_only_on_fb, :boolean, :default => false
 
   preference :facebook_app_id, :string
   preference :facebook_app_secret, :string
