@@ -43,9 +43,9 @@
       <%= check_box_tag 'social[tumblr]', '1', Spree::Config.tumblr_button %>
     </li>
     <li>
-      <%= label_tag 'social[likable]', t(:products_likable) %>
-      <%= hidden_field_tag 'social[likable]', '0' %>
-      <%= check_box_tag 'social[likable]', '1', Spree::Config.likes_only_on_fb %>
+      <%= label_tag 'likable', t(:products_likable) %>
+      <%= hidden_field_tag 'likable', '0' %>
+      <%= check_box_tag 'likable', '1', Spree::Config.likes_only_on_fb %>
     </li>
   </ul>
 
