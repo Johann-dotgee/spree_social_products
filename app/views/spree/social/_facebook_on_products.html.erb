@@ -1,0 +1,22 @@
+<% content_for :head do %>
+	<meta property="og:title" content="<%= product.name %>" />
+	<meta property="og:type" content="product" />
+	<meta property="og:url" content="<%= product_url(product) %>" />
+	<meta property="og:image" content="<%= "http://#{Spree::Config.site_url}/spree/products/#{product.images.first.id}/product/#{product.images.first.attachment_file_name}" %>" />
+	<meta property="og:description" content="<%= product.description %>" />
+	<meta property="fb:app_id" content="<%= Spree::Config.facebook_app_id %>" />
+<% end %>
+
+<div class="facebook-like">
+	<script>
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=<%= Spree::Config.facebook_app_id %>";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="segoe ui" data-href="<%= product_url(product) %>"></div>
+</div>

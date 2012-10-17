@@ -1,0 +1,63 @@
+<% unless Spree::Config.facebook_app_id.nil? %>
+  <% content_for :head do %>
+    <meta property="og:title" content="<%= @product.name %>" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="<%= product_url(@product) %>" />
+    <meta property="og:image" content="<%= "http://#{Spree::Config.site_url}/spree/products/#{@product.images.first.id}/product/#{@product.images.first.attachment_file_name}" %>" />
+    <meta property="og:description" content="<%= @product.description %>" />
+    <meta property="fb:app_id" content="<%= Spree::Config.facebook_app_id %>" />
+  <% end %>
+
+    <script src='http://connect.facebook.net/fr_FR/all.js'></script>
+    <p><a onclick='postToFeed(); return false;' style="cursor:pointer;background-image:url('/assets/social/share_fb.png');width:64px;height:24px;display:block;"></a></p>
+    <p id='msg'></p>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : "<%= Spree::Config.facebook_app_id %>", // App ID
+        channelUrl : '//www.spreeworks.com/channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+    };
+
+
+    function postToFeed() {
+
+      var obj = {
+        method: 'feed',
+        link: '<%= product_url(@product) %>',
+        picture: '<%= "http://#{Spree::Config.site_url}/spree/products/#{@product.images.first.id}/product/#{@product.images.first.attachment_file_name}" %>',
+        name: '<%= @product.name %>',
+        caption: '<%= @product.images.first.attachment_file_name %>',
+        description: '<%= @product.description %>'
+      };
+
+      function callback(response) {
+        if (response && response.post_id) {
+          if(confirm('Le status a ete publie, voulez-vous etre redirige vers ce dernier ?')){
+            FB.api('/me', function(response2) {
+              link = "http://facebook.com/"+response2.name.toLowerCase().replace(" ", ".")+"/posts/"+response['post_id'].replace(/[0-9]+_/g, '');
+              window.top.location.replace(link);
+            });
+          }
+        }else {
+          alert('Post was not published.');
+        } 
+      }
+
+      FB.ui(obj, callback);
+    }
+
+    // Load the SDK Asynchronously
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=<%= Spree::Config.facebook_app_id %>";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+  <div class="fb-like" data-send="true" data-width="470" data-show-faces="false" data-font="segoe ui" data-href='<%= "http://#{Spree::Config.site_url}/products/#{@product.permalink}" %>'></div>
+<% end %>

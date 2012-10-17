@@ -1,0 +1,48 @@
+<% if flash[:notice] %>
+  <% one = @order.line_items.first %>
+  <% product = one.variant.product %>
+  <script src='http://connect.facebook.net/fr_FR/all.js'></script>
+  <p id='msg'></p>
+  <script>
+    if(window !== window.top){
+      FB.init({
+        appId      : "<%= Spree::Config.facebook_app_id %>", // App ID
+        channelUrl : '//www.spreeworks.com/channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+
+
+    function postToFeed() {
+
+      var obj = {
+        method: 'feed',
+        link: '<%= product_url(product) %>',
+        picture: '<%= "http://#{Spree::Config.site_url}/spree/products/#{product.images.first.id}/product/#{product.images.first.attachment_file_name}" %>',
+        name: '<%= product.name %>',
+        description: '<%= product.description %>',
+        caption: 'Boutique <%= Spree::Config.site_name %>',
+        message: "J'ai achete <%= one.quantity %> <%= product.name %> sur <%= Spree::Config.site_name %> !"
+      };
+
+      function callback(response) {
+        if (response && response.post_id) {
+          if(confirm('Le status a ete publie, voulez-vous etre redirige vers ce dernier ?')){
+            FB.api('/me', function(response2) {
+              link = "http://facebook.com/"+response2.name.toLowerCase().replace(" ", ".")+"/posts/"+response['post_id'].replace(/[0-9]+_/g, '');
+              window.open(link);
+            });
+          }
+        }else {
+          alert('Post was not published.');
+        } 
+      }
+
+      FB.ui(obj, callback);
+    }
+
+    postToFeed();
+  }
+  </script>
+<% end %>
