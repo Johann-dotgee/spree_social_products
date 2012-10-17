@@ -13,7 +13,7 @@ module Spree
             Spree::Config["#{provider}_button"] = false
           end
         end
-        if params[:likable] == 1
+        if params[:likable] == '1'
           Spree::Config.likes_only_on_fb = true
         else
           Spree::Config.likes_only_on_fb = false
